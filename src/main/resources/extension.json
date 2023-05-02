@@ -1,0 +1,5 @@
+{
+  "entrypoint": "com.github.lordtgm.minestom.RedstoneExtension",
+  "name": "RedstoneExtension",
+  "version": "1.0.0"
+}
