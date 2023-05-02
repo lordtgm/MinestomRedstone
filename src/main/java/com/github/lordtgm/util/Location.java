@@ -24,6 +24,10 @@ public record Location(Instance instance, Point point) {
         return new Location(this.instance, point);
     }
 
+    public Location withPoint(Function<Point,Point> function) {
+        return withPoint(function.apply(point()));
+    }
+
 // --Commented out by Inspection START (5/2/2023 11:22 AM):
 //    public Location withInstance(Instance instance) {
 //        return new Location(instance, this.point);

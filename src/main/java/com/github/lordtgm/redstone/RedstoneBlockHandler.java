@@ -2,8 +2,6 @@ package com.github.lordtgm.redstone;
 
 import com.github.lordtgm.util.Location;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.utils.NamespaceID;
@@ -14,11 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 public abstract class RedstoneBlockHandler implements BlockHandler {
 
     public static final RedstoneBlockHandler opaqueBlockHandler = new RedstoneBlockHandler() {
-
-        @Override
-        public boolean update(Location location) {
-            return updatePowerLevel(location);
-        }
 
         @Override
         public @NotNull NamespaceID getNamespaceId() {
@@ -40,7 +33,7 @@ public abstract class RedstoneBlockHandler implements BlockHandler {
     public static final RedstoneBlockHandler transparentBlockHandler = new RedstoneBlockHandler() {
 
         @Override
-        public boolean update(Location location) {
+        public boolean update(Location location, Location initiator) {
             return false;
         }
 
@@ -69,7 +62,9 @@ public abstract class RedstoneBlockHandler implements BlockHandler {
         }
     }
 
-    public abstract boolean update(Location location);
+    public boolean update(Location location, Location initiator) {
+        return updatePowerLevel(location);
+    }
     public void onNextTick(Runnable runnable) {
         MinecraftServer.getSchedulerManager().scheduleNextTick(runnable);
     }
@@ -83,15 +78,11 @@ public abstract class RedstoneBlockHandler implements BlockHandler {
                 location.withPoint(location.point().add(0, 0, 1))
                 }) {
             if (!nearbyLocation.point().samePoint(initiator.point())) {
-                if (getHandlerOrDummy(nearbyLocation.getBlock()).update(nearbyLocation)) {
-                    updateNearby(nearbyLocation, initiator);
+                if (getHandlerOrDummy(nearbyLocation.getBlock()).update(nearbyLocation, initiator)) {
+                    updateNearby(nearbyLocation, location);
                 }
             }
         }
-    }
-
-    protected void updateNearby(Instance instance, Point point) {
-        updateNearby(new Location(instance, point));
     }
 
     public byte getStrongPowerLevel(@NotNull Location location) {
@@ -139,17 +130,17 @@ public abstract class RedstoneBlockHandler implements BlockHandler {
                     }
                 }
             }
-
-            if (weakPowerLevel != getWeakPowerLevel(location)) {
+        }
+        if (weakPowerLevel != getWeakPowerLevel(location)) {
                 setWeakPowerLevel(location, weakPowerLevel);
                 changed = true;
             }
 
-            if (strongPowerLevel != getStrongPowerLevel(location)) {
+        if (strongPowerLevel != getStrongPowerLevel(location)) {
                 setStrongPowerLevel(location, strongPowerLevel);
                 changed = true;
             }
-        }
+
         return changed;
     }
 
@@ -167,29 +158,44 @@ public abstract class RedstoneBlockHandler implements BlockHandler {
                 (block.registry().isSolid() ? opaqueBlockHandler : transparentBlockHandler));
     }
 
+    /*
     public void updateNearby(Location location) {
+        updateNearby(location, location);
+    }
+    */
+
+    @Override
+    public void onPlace(@NotNull Placement placement) {
+        System.out.println("Block placed");
+        Location location = new Location(placement.getInstance(), placement.getBlockPosition());
+        update(location, location);
         updateNearby(location, location);
     }
 
     @Override
-    public void onPlace(@NotNull Placement placement) {
-        updateNearby(placement.getInstance(), placement.getBlockPosition());
-    }
-
-    @Override
     public void onDestroy(@NotNull Destroy destroy) {
-        updateNearby(destroy.getInstance(), destroy.getBlockPosition());
+        System.out.println("Block destroyed");
+        Location location = new Location(destroy.getInstance(), destroy.getBlockPosition());
+        updateNearby(location, location);
     }
 
     @Override
     public boolean onInteract(@NotNull Interaction interaction) {
-        updateNearby(interaction.getInstance(), interaction.getBlockPosition());
+        /*
+        Location location = new Location(interaction.getInstance(), interaction.getBlockPosition());
+        update(location);
+        updateNearby(location, location);
+         */
         return false;
     }
 
     @Override
     public void onTouch(@NotNull Touch touch) {
-        updateNearby(touch.getInstance(), touch.getBlockPosition());
+        /*
+        Location location = new Location(touch.getInstance(), touch.getBlockPosition());
+        update(location);
+        updateNearby(location, location);
+         */
     }
 
     @SuppressWarnings("SameReturnValue")
