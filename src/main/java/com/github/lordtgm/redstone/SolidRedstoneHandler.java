@@ -57,7 +57,7 @@ public interface SolidRedstoneHandler extends RedstoneHandler {
         location.modifyBlock(block -> block.withTag(RedstoneTags.WeakPowerLevel, value));
     }
 
-    private void setStrongPowerLevel(@NotNull Location location, byte value) {
+    default void setStrongPowerLevel(@NotNull Location location, byte value) {
         location.modifyBlock(block -> block.withTag(RedstoneTags.StrongPowerLevel, value));
     }
 

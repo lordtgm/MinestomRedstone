@@ -53,8 +53,8 @@ public interface ComponentRedstoneHandler extends RedstoneHandler {
 
             if (handler instanceof ComponentRedstoneHandler componentRedstoneHandler) {
 
-                if (componentRedstoneHandler.getComponentPowerLevel(relativeLocation) > powerLevel) {
-                    powerLevel = componentRedstoneHandler.getComponentPowerLevel(relativeLocation);
+                if (componentRedstoneHandler.getPowerDelivery(relativeLocation,direction) > powerLevel) {
+                    powerLevel = componentRedstoneHandler.getPowerDelivery(relativeLocation,direction.opposite());
                 }
 
             }

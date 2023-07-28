@@ -15,4 +15,14 @@ public class LeverHandler implements ComponentRedstoneHandler {
     public boolean doesDeliverPower(@NotNull Location location, @NotNull Direction direction) {
         return true;
     }
+
+    @Override
+    public boolean updateComponentPowerLevel(Location location) {
+        return false;
+    }
+
+    @Override
+    public void update(Location location) {
+        this.updateNearby(location);
+    }
 }

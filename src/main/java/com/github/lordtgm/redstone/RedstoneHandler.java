@@ -29,6 +29,10 @@ public interface RedstoneHandler {
                 : (location.getBlock().isSolid() ? SolidRedstoneHandler : NonSolidRedstoneHandler));
     }
 
+    static void updateAt(Location location) {
+        getHandler(location).update(location);
+    }
+
     /**
      * updates the power level of block in this location.
      * if the block is changed, nearby blocks will get updated as well.
@@ -82,6 +86,6 @@ public interface RedstoneHandler {
     }
 
     static Location getRelativeLocation(Location location, Direction direction) {
-        return location.withPoint(point -> point.add(direction.normalX(), direction.normalY(), direction.normalY()));
+        return location.withPoint(point -> point.add(direction.normalX(), direction.normalY(), direction.normalZ()));
     }
 }

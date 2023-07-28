@@ -20,15 +20,10 @@ java {
 }
 
 dependencies {
-    testImplementation project(path: ':')
-    testImplementation project(path: ':')
-    testImplementation project(path: ':')
-    testImplementation project(path: ':')
-    testImplementation project(path: ':')
-    testImplementation project(path: ':')
     // compileOnly 'com.github.Minestom.Minestom:Minestom:-SNAPSHOT'
-    implementation 'com.github.Minestom.Minestom:Minestom:-SNAPSHOT'
-    testImplementation 'com.github.Minestom.Minestom:Minestom:-SNAPSHOT'
+    implementation 'com.github.Minestom.Minestom:Minestom:c5047b8037'
+    testImplementation 'com.github.Minestom.Minestom:Minestom:c5047b8037'
     implementation group: 'net.java.dev.jna', name: 'jna', version: '5.13.0'
+    testImplementation project(path: ':')
 }
 
