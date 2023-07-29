@@ -29,6 +29,11 @@ public interface RedstoneHandler {
                 : (location.getBlock().isSolid() ? SolidRedstoneHandler : NonSolidRedstoneHandler));
     }
 
+    /**
+     * this method runs the update method for the block at the location.
+     * @param location the location which the block is at
+     */
+
     static void updateAt(Location location) {
         getHandler(location).update(location);
     }
