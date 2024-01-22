@@ -3,7 +3,8 @@ there is a "redstone handler" interface which is the base interface for all thos
 (and let's just say it here, they aren't "block handlers", just handlers)
 * component redstone handler which is for redstone components, meaning anything related to redstone
 * solid redstone handler which is for solid blocks
-* solid component redstone handler 
+* solid component redstone handler. I don't know any use cases for it and might be deleted later.
+
 lets also explain this here, handlers aren't bound to blocks in any way, there is a method for knowing what handler does a block use.
 
 also there are three tags
@@ -11,14 +12,14 @@ also there are three tags
 * weak power level: stores the weak power level of a solid block. redstone dust provides solid blocks with weak power. any component which isn't redstone dust will draw power from an adjacent weakly powered block.
 * component power level: stores the component power level of a component block. this is the amount of power which a component delivers through its outputs. solid blocks or components with matching input direction will also be powered by this.
 
-so a bit of explanation:
+A bit of explanation:
 transmit of power from a solid block to a component is controlled by the component. it can decide how to use the power amount, while the solid block cannot decide how much power it will be delivering.
 transmit of power from a component to a solid block is controlled by the component. same goes here
 transmit of power from a component to a component is controlled by both sides. the amount is decided by the source, while what happens to this amount is decided by the destination.
 (and no, there is no solid block to solid block)
-for solid components, I'm not sure, it's incomplete, and it's because I've not run into such block yet. not even sure if there is such a thing.
+for solid components, I'm not sure, it's incomplete, and it's because I've not faced such block yet. not even sure if there is such a thing.
 
-and here we go to explain each method does
+and here we explain each method does
 the void update, calls updatePower, and if the block's power was changed, it updates the block's neighbors through the updateNearby void.
 the neighbors of a block is determined by the method getNeighbors. the methods updatePower and getNeighbors may be overridden by implementations or sub interfaces.
 static methods getDirectionOf and getRelativeLocation are for utility.
